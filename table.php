@@ -24,7 +24,7 @@ session_start();
         <td><?php echo $value['email'] ?? ''; ?></td>
         <td><?php echo $value['pass'] ?? '' ?></td>
         <td><button type="button" class="btn btn-primary edit" key="<?php echo $key; ?>">edit</button>
-        <button type="button" class="btn btn-danger" key="<?php echo $key; ?>">delete</button></td>
+        <button type="button" class="btn btn-danger delete" key="<?php echo $key; ?>">delete</button></td>
       </tr>
       <?php
         }

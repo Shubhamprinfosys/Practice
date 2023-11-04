@@ -6,7 +6,7 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    
+
     <link rel="stylesheet" href="./toast.style.css">
     <link rel="stylesheet" href="./toast.style.min.css">
 </head>
@@ -53,7 +53,7 @@
           <button type="button" class="btn btn-primary submit">Submit</button>
         </form>
 
-        <?php include('./table.php') ?>
+        <?php include './table.php'?>
       </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -111,11 +111,56 @@
             .then((value) => {
               window.location.reload();
               });
-          
+
          }
     });
   });
+
+
+  // delete
+  $(document).on('click','.delete',function(){
+    var key = $(this).attr('key');
+
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this record",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    $.ajax({
+         type:"POST",
+         url:"backend.php",
+         data:{
+           'key' : key,
+           'action' : "delete",
+         },
+         dataType: 'json',
+         cache:false,
+         success:function(res){
+          swal({
+              title: "Success",
+              text: res.msg,
+              icon: "success",
+              button: "OK",
+              button:true,
+              dangerMode: true,
+            })
+            .then((value) => {
+              window.location.reload();
+              });
+         }
+    });
     
-    
+  } else {
+    swal("Your record is safe!");
+  }
+});
+
+  });
+
+
 </script>
 </html>

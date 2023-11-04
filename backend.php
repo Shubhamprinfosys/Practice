@@ -22,4 +22,10 @@ if (isset($_POST['action']) && $_POST['action'] == "edit") {
         echo json_encode(['status' => 'success' ,'msg' => 'Data Saved Successful']);
     }
 
+}elseif(isset($_POST['action']) && $_POST['action'] == "delete"){
+    if(($_POST['key']!='' && $_POST['key']!=null)){
+        $key                     = $_POST['key'];
+        $_SESSION['items'][$key] = [];
+    }
+    echo json_encode(['status' => 'success' ,'msg' => 'Record deleted successful']);
 }
