@@ -12,6 +12,10 @@ include 'header.php';
     <div class="row">
       <div class="col-md-6">
         <div class="container mt-0">
+        <div class="alert alert-danger error" role="alert" style="display:none;margin:22px;">
+            
+            </div>
+            
           <form id="formdata" enctype="multipart/form-data">
             <div class="mb-3">
               <input type="hidden" name="key" class="keyvalue" value="">
@@ -27,8 +31,11 @@ include 'header.php';
             <label for="file" class="form-label">Upload Document</label>
             <input type="file" class="form-control fileToUpload" name="fileToUpload" id="fileToUpload">
             </div>
+            
             <button type="button" class="btn btn-primary submit">Submit</button>
           </form>
+
+          
         
         </div>
         
@@ -75,16 +82,16 @@ include 'header.php';
     var file  = $('.fileToUpload').val();
     var condition = true;
     msg = '';
-    if(email==""){
-          condition = false;
-          msg = "Please enter the email address";
-          showAlertMsg(type='Error',icon='error',msg);
-    }
-    if(pass==""){
-      condition = false;
-      msg = "Please enter the Passcode";
-      showAlertMsg(type='Error',icon='error',msg);
-    }
+    // if(email==""){
+    //       condition = false;
+    //       msg = "Please enter the email address";
+    //       showAlertMsg(type='Error',icon='error',msg);
+    // }
+    // if(pass==""){
+    //   condition = false;
+    //   msg = "Please enter the Passcode";
+    //   showAlertMsg(type='Error',icon='error',msg);
+    // }
     var formdata= new FormData($('#formdata')[0]);
     formdata.append('action','create');
     formdata.append('key',key);
@@ -97,19 +104,30 @@ include 'header.php';
            processData: false,
            dataType: 'json',
            success:function(res){
-            $('#formdata')[0].reset();
-              swal({
-                title: "Success",
-                text: res.msg,
-                icon: "success",
-                button: "OK",
-                button:true,
-                dangerMode: true,
-              })
-              .then((value) => {
-                // window.location.reload();
-                 $('.append_table').html(res.view);
-                });
+            console.log(res);
+            if(res.status=="success"){
+              $('#formdata')[0].reset();
+                swal({
+                  title: "Success",
+                  text: res.msg,
+                  icon: "success",
+                  button: "OK",
+                  button:true,
+                  dangerMode: true,
+                })
+                .then((value) => {
+                  // window.location.reload();
+                   $('.append_table').html(res.view);
+                  });
+
+            }else{
+              var error = res.msg;
+              $('.error').html('');
+              $(error).each(function(key,item){
+                $('.error').append("<li>"+item+"</li>");
+              });
+               $('.error').show();
+            }
 
            }
       });

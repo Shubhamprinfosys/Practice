@@ -10,6 +10,10 @@ if (isset($_POST['action']) && $_POST['action'] == "edit") {
 
 } elseif (isset($_POST['action']) && $_POST['action'] == "create") {
     
+    $item['email']       = $_POST['email'];
+    $item['pass']        = $_POST['pass'];
+    // print_r($_POST);
+    // exit;
     $targetFile = "";
     if(isset($_FILES["fileToUpload"]["name"]) && $_FILES["fileToUpload"]["name"]!=""){
         $targetDirectory = "uploads/"; // Directory where uploaded files will be saved
@@ -20,9 +24,10 @@ if (isset($_POST['action']) && $_POST['action'] == "edit") {
         $targetFile = $targetDirectory .  $filename;
         move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile);
     }
-    if (!empty($_POST)) {
-        $item['email']       = $_POST['email'];
-        $item['pass']        = $_POST['pass'];
+    
+    if (!empty($_POST) && $item['email']!="" && $item['pass']!="") {
+        
+        
         if($targetFile!=""){
             $item['file']    = $targetFile;
         }
@@ -43,6 +48,19 @@ if (isset($_POST['action']) && $_POST['action'] == "edit") {
        
         $view = $obj->getHTMLView();
         echo json_encode(['status' => 'success' ,'msg' => 'Data Saved Successful','view' => $view]);
+    }else{
+        $errorArray = array();
+        if($item['email']==""){
+            $errormsg = "Email field is required!";
+            array_push($errorArray,$errormsg);
+        }
+        if($item['pass']==""){
+            $passerror = "Passcode field is required!";
+            array_push($errorArray,$passerror);
+        }
+        // print_r($errorArray);
+        // exit;
+        echo json_encode(['status' => 'fail' ,'msg' => $errorArray]);
     }
 
 }elseif(isset($_POST['action']) && $_POST['action'] == "delete"){
